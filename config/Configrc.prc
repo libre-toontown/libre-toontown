@@ -31,8 +31,8 @@ want-dev 0
 schellgames-dev 0
 
 # DC Files
-dc-file etc/toon.dc
-dc-file etc/otp.dc
+dc-file config/toon.dc
+dc-file config/otp.dc
 
 # HTTP/Downloading
 verify-ssl 0
