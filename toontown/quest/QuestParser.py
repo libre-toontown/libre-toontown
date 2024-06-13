@@ -490,7 +490,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         token, varName, filenameTemplate = line
         # TODO figure out the option for ppl who want minnie to show them around
         classicChar = 'mickey'
-       
+
         filename = filenameTemplate % classicChar
         if base.config.GetString('language', 'english') == 'japanese':
             dialogue = base.loader.loadSfx(filename)
@@ -532,7 +532,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         track = Sequence()
         track.append(Func(self.__unloadChar, char))
         track.append(Func(self.delVar, name))
-        return track    
+        return track
 
 
     def parseLoadSuit(self, line):
@@ -713,9 +713,26 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[4:])
         return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
 
-   
+    def parseCCChatConfirm(self, line):
+        lineLength = len(line)
+        avatarName = line[1]
+        avatar = self.getVar(avatarName)
+        chatString = eval('TTLocalizer.' + line[2] % '')
+        quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[3:])
+        return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
 
-
+    def parseCCChatToConfirm(self, line):
+        lineLength = len(line)
+        avatarKey = line[1]
+        avatar = self.getVar(avatarKey)
+        toAvatarKey = line[2]
+        toAvatar = self.getVar(toAvatarKey)
+        localizerAvatarName = toAvatar.getName().capitalize()
+        toAvatarName = eval('TTLocalizer.' + localizerAvatarName)
+        chatString = eval('TTLocalizer.' + line[3] % '')
+        chatString = chatString.replace('%s', toAvatarName)
+        quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[4:])
+        return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
 
     def parsePlaySfx(self, line):
         if len(line) == 2:
